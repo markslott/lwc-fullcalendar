@@ -2,7 +2,24 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata" fqn="fullCalendarTest">
     <apiVersion>46.0</apiVersion>
     <isExposed>true</isExposed>
-    <targets>
+<targets>
         <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
     </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightning__RecordPage,lightning__HomePage,lightningCommunity__Default">
+            <property name="objectName" label="Object name" type="String" required="true" default="Calendar_Event__c"></property>
+            <property name="startField" label="Start time field name" description="This needs to be a datetime field on the object that indicates the event start time" type="String" required="true" default="Start_Time__c"></property>
+            <property name="endField" label="End time field name" description="This needs to be a datetime field on the object that indicates the event end time" type="String" required="true" default="End_Time__c"></property>
+            <property name="titleField" label="Event title field" type="String" required="true" default="Name"></property>
+            <property name="colorField" label="Color field" description="Any valid CSS value can go here" type="String" default="Color__c"></property>
+            <property name="allDayField" label="All day event field" description="Field that specifies if the event is an all day event" type="String" default="AllDay__c"></property>
+            <property name="additionalFilter" label="Additional Filter" description="starts with AND or OR - end of SOQL statement" type="String" default=""></property>
+            <property name="aspectRatio" label="Calendar Aspect Ratio" description="higher values makes the calendar shorter vertically" type="String" default="1.35"></property>
+            <property name="height" label="Height of Calendar" description="height of calendar in pixels. unset = automatic" type="Integer" default="650"></property>
+        </targetConfig>
+    </targetConfigs>
 </LightningComponentBundle>
