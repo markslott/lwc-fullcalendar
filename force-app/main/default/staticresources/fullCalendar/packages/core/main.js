@@ -123,7 +123,10 @@ Docs & License: https://fullcalendar.io/
         return null;
     };
     function elementClosest(el, selector) {
-        return closestMethod.call(el, selector);
+        //debugger;
+        //return closestMethod.call(el, selector);
+        //fix for lwc
+        return el.closest(selector);
     }
     function elementMatches(el, selector) {
         return matchesMethod.call(el, selector);

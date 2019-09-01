@@ -17,8 +17,7 @@ var titleField;
 export default class FullCalendarTest extends LightningElement {
   calendar;
   fullCalendarInitialized = false;
-  events;
-
+  
   @api titleField;
   @api objectName;
   @api startField;
@@ -56,7 +55,10 @@ export default class FullCalendarTest extends LightningElement {
           loadScript(this, fullCalendar + "/packages/list/main.js"),
           loadStyle(this, fullCalendar + "/packages/list/main.css"),
           loadScript(this, fullCalendar + "/packages/timegrid/main.js"),
-          loadStyle(this, fullCalendar + "/packages/timegrid/main.css")
+          loadStyle(this, fullCalendar + "/packages/timegrid/main.css"),
+          loadScript(this, fullCalendar + "/packages/interaction/main.js"),
+          loadScript(this, fullCalendar + "/packages/moment/main.js"),
+          loadScript(this, fullCalendar + "/packages/moment-timezone/main.js"),
         ]).then(() => {
           console.log("init");
           this.init();
@@ -78,7 +80,7 @@ export default class FullCalendarTest extends LightningElement {
     var calendarEl = this.template.querySelector(".calendar");
     // eslint-disable-next-line no-undef
     this.calendar = new FullCalendar.Calendar(calendarEl, {
-      plugins: ["dayGrid", "timeGrid", "list"],
+      plugins: ["dayGrid", "timeGrid", "list","interaction","moment"],
       views: {
         listDay: { buttonText: "list day" },
         listWeek: { buttonText: "list week" },
@@ -89,6 +91,10 @@ export default class FullCalendarTest extends LightningElement {
         dayGridWeek: { buttonText: "week" },
         dayGridDay: { buttonText: "day" }
       },
+      
+      eventClick: info => {console.log("event click",info)},
+      eventMouseEnter: info => {console.log("mouse enter", info)},
+      dateClick:info => {console.log("date click", info)},
 
       header: {
         left: "title",
@@ -96,20 +102,28 @@ export default class FullCalendarTest extends LightningElement {
         right:
           "listDay,listWeek,listMonth,timeGridWeek,timeGridDay,dayGridMonth,dayGridWeek,dayGridDay"
       },
-
       eventSources: [
         {
           events: this.eventSourceHandler,
           id: "custom"
         },
-        {
-          events: "https://fullcalendar.io/demo-events.json",
-          id: "demo"
-        }
-      ]
+        //{
+        //  events: "https://fullcalendar.io/demo-events.json",
+        //  id: "demo"
+        //}
+      ],
     });
-
     this.calendar.render();
+  }
+
+  handleEventClick(info) {
+    console.log('Event: ' + info.event.title);
+    console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+    console.log('View: ' + info.view.type);
+
+    // change the border color just for fun
+    info.el.style.borderColor = 'red';
+
   }
 
   eventSourceHandler(info, successCallback, failureCallback) {
