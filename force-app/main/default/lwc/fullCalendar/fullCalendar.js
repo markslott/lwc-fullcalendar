@@ -4,6 +4,7 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import fullCalendar from "@salesforce/resourceUrl/fullCalendar";
 import { loadStyle, loadScript } from "lightning/platformResourceLoader";
 import getEventsNearbyDynamic from "@salesforce/apex/FullCalendarController.getEventsNearbyDynamic";
+import { NavigationMixin } from 'lightning/navigation';
 
 //global variables
 var objectName;
@@ -14,7 +15,7 @@ var additionalFilter;
 var allDayField;
 var titleField;
 
-export default class FullCalendarTest extends LightningElement {
+export default class FullCalendarComponent extends NavigationMixin(LightningElement) {
   calendar;
   fullCalendarInitialized = false;
   
@@ -27,6 +28,11 @@ export default class FullCalendarTest extends LightningElement {
   @api aspectRatio;
   @api allDayField;
   @api height;
+
+  constructor() {
+    super();
+    this.addEventListener('fceventclick', this.handleEventClick.bind(this));
+  }
 
   renderedCallback() {
     if (this.fullCalendarInitialized) {
@@ -92,7 +98,11 @@ export default class FullCalendarTest extends LightningElement {
         dayGridDay: { buttonText: "day" }
       },
       
-      eventClick: info => {console.log("event click",info)},
+      eventClick: info => {
+        const selectedEvent = new CustomEvent('fceventclick', { detail: info });
+        console.log("eventClick",info);
+        this.dispatchEvent(selectedEvent);
+      },
       eventMouseEnter: info => {console.log("mouse enter", info)},
       dateClick:info => {console.log("date click", info)},
 
@@ -116,13 +126,21 @@ export default class FullCalendarTest extends LightningElement {
     this.calendar.render();
   }
 
-  handleEventClick(info) {
+  handleEventClick(event) {
+    let info = event.detail;
     console.log('Event: ' + info.event.title);
     console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
     console.log('View: ' + info.view.type);
-
+    console.log(info);
+    this[NavigationMixin.Navigate]({
+      type: 'standard__recordPage',
+      attributes: {
+          recordId: info.event.id,
+          actionName: 'view',
+      },
+    });
     // change the border color just for fun
-    info.el.style.borderColor = 'red';
+    //info.el.style.borderColor = 'red';
 
   }
 

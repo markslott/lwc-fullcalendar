@@ -5,6 +5,9 @@
         "paths": {
             "c/fullCalendarTest": [
                 "fullCalendarTest/fullCalendarTest.js"
+            ],
+            "c/fullCalendar": [
+                "fullCalendar/fullCalendar.js"
             ]
         }
     },
