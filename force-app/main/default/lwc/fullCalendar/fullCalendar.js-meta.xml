@@ -20,6 +20,9 @@
             <property name="additionalFilter" label="Additional Filter" description="starts with AND or OR - end of SOQL statement" type="String" default=""></property>
             <property name="aspectRatio" label="Calendar Aspect Ratio" description="higher values makes the calendar shorter vertically" type="String" default="1.35"></property>
             <property name="height" label="Height of Calendar" description="height of calendar in pixels. unset = automatic" type="Integer" default="650"></property>
+            <property name="weekView" label="Full Calendar week view type" type="String" datasource="timeGridWeek,dayGridWeek" default="timeGridWeek" />
+            <property name="dayView" label="Full Calendar day view type" type="String" datasource="timeGridDay,dayGridDay" default="timeGridDay" />
+            <property name="listView" label="Full Calendar list view type" type="String" datasource="listDay,listWeek,listMonth" default="listMonth" />
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

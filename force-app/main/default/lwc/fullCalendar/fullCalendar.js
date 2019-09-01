@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { LightningElement, api} from "lwc";
+import { LightningElement, api, track} from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import fullCalendar from "@salesforce/resourceUrl/fullCalendar";
 import { loadStyle, loadScript } from "lightning/platformResourceLoader";
@@ -28,6 +28,12 @@ export default class FullCalendarComponent extends NavigationMixin(LightningElem
   @api aspectRatio;
   @api allDayField;
   @api height;
+
+  @api weekView;
+  @api dayView;
+  @api listView;
+
+  @track calendarLabel;
 
   constructor() {
     super();
@@ -105,13 +111,13 @@ export default class FullCalendarComponent extends NavigationMixin(LightningElem
       },
       eventMouseEnter: info => {console.log("mouse enter", info)},
       dateClick:info => {console.log("date click", info)},
-
-      header: {
+      header: false,
+      /*header: {
         left: "title",
         center: "today prev,next",
         right:
           "listDay,listWeek,listMonth,timeGridWeek,timeGridDay,dayGridMonth,dayGridWeek,dayGridDay"
-      },
+      },*/
       eventSources: [
         {
           events: this.eventSourceHandler,
@@ -124,7 +130,50 @@ export default class FullCalendarComponent extends NavigationMixin(LightningElem
       ],
     });
     this.calendar.render();
+    this.calendarLabel = this.calendar.view.title;
   }
+
+  nextHandler() {
+    this.calendar.next();
+    this.calendarLabel = this.calendar.view.title;
+  }
+
+  previousHandler() {
+    this.calendar.prev();
+    this.calendarLabel = this.calendar.view.title;
+  }
+
+  dailyViewHandler() {
+    this.calendar.changeView(this.dayView);
+    this.calendarLabel = this.calendar.view.title;
+  }
+
+  weeklyViewHandler() {
+    this.calendar.changeView(this.weekView);
+    this.calendarLabel = this.calendar.view.title;
+  }
+
+  monthlyViewHandler() {
+    this.calendar.changeView('dayGridMonth');
+    this.calendarLabel = this.calendar.view.title;
+  }
+
+  listViewHandler() {
+    this.calendar.changeView(this.listView);
+    this.calendarLabel = this.calendar.view.title;
+  }
+
+  today() {
+    this.calendar.today();
+    this.calendarLabel = this.calendar.view.title;
+  }
+
+  refresh() {
+    var eventSource = this.calendar.getEventSourceById('custom');
+    eventSource.refetch();
+  }
+
+
 
   handleEventClick(event) {
     let info = event.detail;
