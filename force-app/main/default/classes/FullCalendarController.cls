@@ -2,7 +2,7 @@ public with sharing class FullCalendarController {
 
     public FullCalendarController() {}
 
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static List<Object> getEventsNearbyDynamic(Date startDate, Date endDate, String objectName, String titleField, String startField, String endField, String colorField, String allDayField, String additionalFilter)  {
         Datetime lastMonth = Datetime.newInstance(startDate.year(),startDate.month(),startDate.day());
         //lastMonth = lastMonth.addMonths(-1);
@@ -37,10 +37,12 @@ public with sharing class FullCalendarController {
         System.debug('endField = ' + endField);
         System.debug('colorField = ' + colorField);
         System.debug(soqlQuery);
+
         List<Object> q = Database.query(soqlQuery);
         if (q == null) {
             q = new List<Object>();
         }
+        System.debug('results = ' + q.size());
         return q;
     }
 

@@ -126,7 +126,7 @@ export default class FullCalendarTest extends LightningElement {
     })
       .then(result => {
         if (result) {
-          let events = result.data;
+          let events = result;
           let e = [];
           for (let event in events) {
             if (event) {
