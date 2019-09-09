@@ -35,9 +35,10 @@ export default class FullCalendarComponent extends NavigationMixin(LightningElem
 
   @track calendarLabel;
 
-  constructor() {
-    super();
+  
+  connectedCallback() {
     this.addEventListener('fceventclick', this.handleEventClick.bind(this));
+    //this.addEventListener('mousewheel', this.handleScroll.bind(this));  
   }
 
   renderedCallback() {
@@ -173,6 +174,10 @@ export default class FullCalendarComponent extends NavigationMixin(LightningElem
     eventSource.refetch();
   }
 
+  handleScroll(event) {
+    console.log("handleScroll");
+    event.stopImmediatePropogation();
+  }
 
 
   handleEventClick(event) {
